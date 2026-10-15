@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin Login | Gedewon Sabafkai</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: #f8f5ef;
+      color: #29251f;
+      font-family: "Inter", sans-serif;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 430px;
+      padding: 42px 36px;
+      background: #fffdf9;
+      border: 1px solid #e5ded3;
+      border-radius: 12px;
+      box-shadow: 0 14px 40px rgba(54,43,30,.06);
+    }
+    .brand {
+      margin: 0 0 8px;
+      font-family: "Lora", serif;
+      font-size: 25px;
+      font-weight: 600;
+    }
+    .eyebrow {
+      margin: 0 0 30px;
+      color: #815b3d;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-family: "Lora", serif;
+      font-size: 30px;
+      font-weight: 500;
+    }
+    .intro {
+      margin: 0 0 28px;
+      color: #777064;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    label {
+      display: block;
+      margin: 18px 0 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    input {
+      width: 100%;
+      min-height: 47px;
+      padding: 12px 13px;
+      border: 1px solid #e5ded3;
+      border-radius: 6px;
+      outline: none;
+      background: white;
+      font: inherit;
+      font-size: 14px;
+    }
+    input:focus {
+      border-color: #815b3d;
+      box-shadow: 0 0 0 3px rgba(129,91,61,.10);
+    }
+    button {
+      width: 100%;
+      min-height: 48px;
+      margin-top: 25px;
+      border: 0;
+      border-radius: 6px;
+      background: #815b3d;
+      color: white;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover:not(:disabled) { background: #68462e; }
+    button:disabled { cursor: not-allowed; opacity: .65; }
+    .message {
+      display: none;
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+    .message.error {
+      display: block;
+      background: #fbefed;
+      color: #a33328;
+    }
+    .message.success {
+      display: block;
+      background: #edf6ed;
+      color: #285b32;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 28px;
+      color: #777064;
+      font-size: 13px;
+      text-decoration: none;
+    }
+    .footer-note {
+      margin: 30px 0 0;
+      padding-top: 20px;
+      border-top: 1px solid #e5ded3;
+      color: #777064;
+      font-size: 11px;
+      line-height: 1.6;
+      text-align: center;
+    }
+    @media (max-width: 480px) {
+      .login-card { padding: 32px 23px; }
+      h1 { font-size: 27px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="login-card">
+    <p class="brand">Gedewon Sabafkai</p>
+    <p class="eyebrow">Thoughts, Stories &amp; Ideas</p>
+
+    <h1>Welcome back</h1>
+    <p class="intro">
+      Sign in to manage your articles, save drafts, and publish your writing.
+    </p>
+
+    <form id="loginForm">
+      <label for="email">Email address</label>
+      <input id="email" name="email" type="email"
+             autocomplete="username" placeholder="you@example.com" required>
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password"
+             autocomplete="current-password" placeholder="Enter your password" required>
+
+      <button id="loginButton" type="submit" disabled>Sign in</button>
+      <div id="message" class="message" role="status" aria-live="polite"></div>
+    </form>
+
+    <a class="back-link" href="index.html">← Back to the blog</a>
+
+    <p class="footer-note">
+      Private administration area. Only the authorized administrator can manage articles.
+    </p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    "use strict";
+
+    const SUPABASE_URL = "https://zsodixjdlorfdwbfdync.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_vYvWnCLXVWqdP6_Jkit3tQ_Gw9FElRn";
+    const ADMIN_USER_ID = "cc86da0c-0dd3-4bc3-8361-590a23e7b58d";
+
+    const form = document.getElementById("loginForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const loginButton = document.getElementById("loginButton");
+    const message = document.getElementById("message");
+
+    let supabaseClient = null;
+    let isSubmitting = false;
+
+    function showMessage(text, type = "error") {
+      message.textContent = text;
+      message.className = "message " + type;
+    }
+
+    function setLoading(loading) {
+      isSubmitting = loading;
+      loginButton.disabled = loading;
+      loginButton.textContent = loading ? "Signing in..." : "Sign in";
+    }
+
+    async function initializeLogin() {
+      if (!window.supabase) {
+        showMessage("Supabase could not load. Check your internet connection and refresh.");
+        return;
+      }
+
+      try {
+        supabaseClient = window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_PUBLISHABLE_KEY
+        );
+
+        const { data, error } = await supabaseClient.auth.getUser();
+
+        if (!error && data.user) {
+          if (data.user.id === ADMIN_USER_ID) {
+            window.location.replace("admin.html");
+            return;
+          }
+
+          await supabaseClient.auth.signOut();
+          showMessage("This account is not authorized to access the admin area.");
+        }
+
+        loginButton.disabled = false;
+      } catch (error) {
+        console.error(error);
+        showMessage("Could not connect to Supabase. Check your connection and project settings.");
+      }
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      if (!supabaseClient || isSubmitting) return;
+
+      message.textContent = "";
+      message.className = "message";
+      setLoading(true);
+
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+          email: emailInput.value.trim(),
+          password: passwordInput.value
+        });
+
+        if (error) throw error;
+
+        if (!data.user || data.user.id !== ADMIN_USER_ID) {
+          await supabaseClient.auth.signOut();
+          showMessage("This account is not authorized to access the admin area.");
+          return;
+        }
+
+        showMessage("Login successful. Opening your dashboard...", "success");
+        window.location.replace("admin.html");
+      } catch (error) {
+        console.error(error);
+        showMessage(error.message || "Login failed. Check your email and password.");
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    initializeLogin();
+  </script>
+</body>
+</html>

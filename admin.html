@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Gedewon Sabafkai</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #e0e7ff;
+      --danger: #dc2626;
+      --danger-bg: #fee2e2;
+      --green: #059669;
+      --green-bg: #d1fae5;
+      --sidebar-width: 260px;
+      --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Sidebar Navigation */
+    aside {
+      width: var(--sidebar-width);
+      background: #ffffff;
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 40;
+      transition: var(--transition);
+    }
+
+    .sidebar-brand {
+      padding: 24px 24px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-brand h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      font-family: 'Playfair Display', serif;
+      letter-spacing: -0.01em;
+      color: #0f172a;
+    }
+    .sidebar-brand p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .sidebar-nav {
+      padding: 20px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    .sidebar-link:hover, .sidebar-link.active {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+    .sidebar-link svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Main Layout */
+    .main-wrapper {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      transition: var(--transition);
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+    
+    .header-title-group h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .header-title-group p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Buttons */
+    button, .button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transition);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    button:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
+    
+    .primary { background: var(--primary); color: white; }
+    .primary:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2); }
+    
+    .secondary { background: white; color: var(--text); border: 1px solid var(--border); }
+    .secondary:hover:not(:disabled) { background: var(--bg); border-color: #cbd5e1; transform: translateY(-1px); }
+    
+    .danger { background: var(--danger-bg); color: var(--danger); border: 1px solid transparent; }
+    .danger:hover:not(:disabled) { background: #fecaca; }
+    
+    .success-button { background: var(--green); color: white; }
+    .success-button:hover:not(:disabled) { background: #047857; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2); }
+
+    main {
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px;
+    }
+
+    /* Notifications */
+    .message {
+      padding: 14px 18px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      display: none;
+      line-height: 1.5;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .message.info { display: flex; background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
+    .message.error { display: flex; background: var(--danger-bg); color: #991b1b; border: 1px solid #fecaca; }
+    .message.success { display: flex; background: var(--green-bg); color: #065f46; border: 1px solid #a7f3d0; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Stats Grid */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      transition: var(--transition);
+    }
+    .stat:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .stat strong {
+      display: block;
+      font-size: 32px;
+      margin-top: 8px;
+      font-family: 'Playfair Display', serif;
+      letter-spacing: -0.02em;
+    }
+
+    /* Panels & Cards */
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .panel h3 {
+      margin: 0 0 20px;
+      font-size: 18px;
+      font-weight: 700;
+      font-family: 'Playfair Display', serif;
+      letter-spacing: -0.01em;
+    }
+
+    /* Editor Panel styling */
+    #editorPanel {
+      display: none;
+      animation: fadeIn 0.3s ease;
+      border: 1px solid #c7d2fe;
+      background: #fafbff;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+    .field { margin-bottom: 20px; }
+    .field.full { grid-column: 1 / -1; }
+    
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #334155;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font: inherit;
+      font-size: 14px;
+      background: white;
+      color: var(--text);
+      transition: var(--transition);
+    }
+    input:focus, select:focus, textarea:focus, .rich-editor:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+    }
+    #excerpt { min-height: 100px; resize: vertical; }
+
+    .help {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+    
+    .editor-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .editor-shell {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+    
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 10px 14px;
+      background: #f1f5f9;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+    }
+    .toolbar button {
+      min-width: 34px;
+      height: 34px;
+      padding: 0 10px;
+      border: 1px solid var(--border);
+      background: white;
+      color: #334155;
+      font-weight: 600;
+      border-radius: 8px;
+      box-shadow: none;
+    }
+    .toolbar button:hover {
+      background: #e2e8f0;
+      border-color: #cbd5e1;
+      transform: none;
+    }
+    .toolbar select {
+      width: auto;
+      padding: 6px 12px;
+      font-size: 13px;
+      height: 34px;
+      border-radius: 8px;
+    }
+    .tool-divider {
+      width: 1px;
+      height: 22px;
+      background: #cbd5e1;
+      margin: 0 4px;
+    }
+
+    .rich-editor {
+      min-height: 380px;
+      padding: 24px;
+      outline: none;
+      line-height: 1.8;
+      font-size: 16px;
+      overflow-wrap: anywhere;
+    }
+    .rich-editor:empty::before {
+      content: attr(data-placeholder);
+      color: #94a3b8;
+      pointer-events: none;
+    }
+    .rich-editor h1 { font-size: 2em; line-height: 1.25; }
+    .rich-editor h2 { font-size: 1.6em; line-height: 1.3; }
+    .rich-editor h3 { font-size: 1.3em; line-height: 1.4; }
+    .rich-editor p { margin: 0 0 16px; }
+    .rich-editor img { max-width: 100%; height: auto; border-radius: 10px; cursor: pointer; }
+    .rich-editor blockquote {
+      border-left: 4px solid var(--primary);
+      margin: 20px 0;
+      padding: 12px 20px;
+      background: #f8fafc;
+      color: #475569;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .editor-note {
+      padding: 12px 16px;
+      font-size: 12px;
+      color: var(--muted);
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+    }
+    
+    .cover-preview {
+      display: none;
+      max-width: 260px;
+      max-height: 160px;
+      object-fit: cover;
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #f1f5f9;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .upload-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .upload-row input[type=file] {
+      padding: 8px;
+      font-size: 13px;
+      background: #f8fafc;
+    }
+    .upload-status {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    /* Table styling */
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+      text-align: left;
+    }
+    th, td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    th {
+      background: #f8fafc;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    td { font-size: 14px; background: white; }
+    tr:last-child td { border-bottom: none; }
+    
+    .article-title { font-weight: 700; color: #0f172a; }
+    .article-slug { color: var(--muted); font-size: 12px; margin-top: 3px; font-family: monospace; }
+    
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+    .status.published { background: var(--green-bg); color: #065f46; }
+    .status.draft { background: #fef3c7; color: #92400e; }
+    
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .actions button { padding: 6px 12px; font-size: 13px; border-radius: 8px; }
+    
+    .empty { color: var(--muted); text-align: center; padding: 48px 16px; font-style: italic; }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 32px 0 16px;
+    }
+
+    /* Mobile hamburger toggle */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: 1px solid var(--border);
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 1024px) {
+      aside {
+        transform: translateX(-100%);
+      }
+      aside.open {
+        transform: translateX(0);
+        box-shadow: 10px 0 25px rgba(0,0,0,0.1);
+      }
+      .main-wrapper {
+        margin-left: 0;
+      }
+      .mobile-menu-btn {
+        display: block;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .stats { grid-template-columns: 1fr; }
+      main { padding: 16px; }
+      header { padding: 16px; }
+      .panel { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar Navigation -->
+  <aside id="sidebar">
+    <div class="sidebar-brand">
+      <h1>Gedewon Sabafkai</h1>
+      <p>Publishing Studio</p>
+    </div>
+    <div class="sidebar-nav">
+      <a href="#" class="sidebar-link active">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        Dashboard
+      </a>
+      <a href="index.html" target="_blank" class="sidebar-link">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        View Public Site
+      </a>
+    </div>
+    <div class="sidebar-footer">
+      <button id="logoutButton" class="secondary" type="button" style="width: 100%;">
+        <svg style="width:16px;height:16px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        Log out
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <header>
+      <div style="display:flex; align-items:center; gap:16px;">
+        <button id="sidebarToggle" class="mobile-menu-btn" type="button" aria-label="Toggle navigation">
+          <svg style="width:20px;height:20px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div class="header-title-group">
+          <h2>Admin Workspace</h2>
+          <p>Manage your essays, articles, and publications</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="refreshButton" class="secondary" type="button">
+          <svg style="width:16px;height:16px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          Refresh
+        </button>
+        <button id="newArticleButton" class="primary" type="button">
+          <svg style="width:16px;height:16px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          New Article
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <div id="message" class="message" role="status" aria-live="polite"></div>
+      
+      <!-- Stats Overview -->
+      <section class="stats">
+        <div class="stat">
+          <span>Total Articles</span>
+          <strong id="totalCount">—</strong>
+        </div>
+        <div class="stat">
+          <span>Published</span>
+          <strong id="publishedCount">—</strong>
+        </div>
+        <div class="stat">
+          <span>Drafts</span>
+          <strong id="draftCount">—</strong>
+        </div>
+      </section>
+
+      <!-- Editor Panel Form -->
+      <section class="panel" id="editorPanel">
+        <h3 id="editorHeading">Create an article</h3>
+        <form id="articleForm">
+          <div class="form-grid">
+            <div class="field full">
+              <label for="title">Article title *</label>
+              <input id="title" required maxlength="200" placeholder="Enter your article title">
+            </div>
+            <div class="field">
+              <label for="slug">Article URL slug *</label>
+              <input id="slug" required maxlength="220" placeholder="my-article-title">
+              <div class="help">Lowercase letters, numbers, and hyphens. Generated automatically from title.</div>
+            </div>
+            <div class="field">
+              <label for="category">Category *</label>
+              <select id="category" required>
+                <option value="Ideas">Ideas</option>
+                <option value="Stories">Stories</option>
+                <option value="Personal Growth">Personal Growth</option>
+                <option value="Technology">Technology</option>
+                <option value="Faith">Faith</option>
+                <option value="Education">Education</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="excerpt">Short summary</label>
+              <textarea id="excerpt" maxlength="500" placeholder="A brief description of your article..."></textarea>
+            </div>
+            <div class="field full">
+              <label for="coverImage">Cover image URL (optional)</label>
+              <input id="coverImage" type="url" placeholder="https://example.com/image.jpg">
+              <div class="help">Paste an image URL or choose a picture from your device below.</div>
+              <div class="upload-row">
+                <input id="coverFile" type="file" accept="image/*" aria-label="Choose cover image from computer">
+                <button id="uploadCoverButton" class="secondary" type="button">Upload cover image</button>
+              </div>
+              <div id="coverUploadStatus" class="upload-status" aria-live="polite">Choose an image, then click Upload cover image.</div>
+              <img id="coverPreview" class="cover-preview" alt="Cover image preview">
+            </div>
+            <div class="field full">
+              <label>Article content *</label>
+              <div class="editor-shell">
+                <div class="toolbar" role="toolbar" aria-label="Article formatting tools">
+                  <select id="blockFormat" aria-label="Text style" title="Text style">
+                    <option value="P">Paragraph</option>
+                    <option value="H1">Heading 1</option>
+                    <option value="H2">Heading 2</option>
+                    <option value="H3">Heading 3</option>
+                    <option value="BLOCKQUOTE">Quote</option>
+                  </select>
+                  <span class="tool-divider"></span>
+                  <button type="button" data-command="bold" title="Bold"><b>B</b></button>
+                  <button type="button" data-command="italic" title="Italic"><i>I</i></button>
+                  <button type="button" data-command="underline" title="Underline"><u>U</u></button>
+                  <button type="button" data-command="strikeThrough" title="Strikethrough"><s>S</s></button>
+                  <span class="tool-divider"></span>
+                  <button type="button" data-command="insertUnorderedList" title="Bulleted list">• List</button>
+                  <button type="button" data-command="insertOrderedList" title="Numbered list">1. List</button>
+                  <span class="tool-divider"></span>
+                  <button type="button" data-action="link" title="Insert link">🔗 Link</button>
+                  <button type="button" data-action="image" title="Upload and insert image">🖼 Upload image</button>
+                  <button type="button" data-action="image-url" title="Insert image using URL">Image URL</button>
+                  <span class="tool-divider"></span>
+                  <button type="button" data-command="justifyLeft" title="Align left">⇤</button>
+                  <button type="button" data-command="justifyCenter" title="Center">≡</button>
+                  <button type="button" data-command="justifyRight" title="Align right">⇥</button>
+                  <span class="tool-divider"></span>
+                  <button type="button" data-command="undo" title="Undo">↶</button>
+                  <button type="button" data-command="redo" title="Redo">↷</button>
+                  <button type="button" data-action="clear" title="Clear formatting">Tx</button>
+                </div>
+                <div id="content" class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Article content" data-placeholder="Start writing your masterpiece here..."></div>
+                <div class="editor-note">Select text and use the formatting toolbar above. Click any inserted image to adjust its width.</div>
+              </div>
+              <div id="imageSizeControls" class="upload-row" style="margin-top:12px">
+                <label for="imageWidth" style="margin:0">Selected image width:</label>
+                <select id="imageWidth" style="width:auto"><option value="25%">25%</option><option value="50%">50%</option><option value="75%">75%</option><option value="100%">100%</option></select>
+                <button id="applyImageWidth" type="button" class="secondary">Apply width</button>
+                <span id="selectedImageStatus" class="help" style="margin:0">No image selected</span>
+              </div>
+              <input id="inlineImageFile" type="file" accept="image/*" hidden>
+            </div>
+          </div>
+          <div class="editor-actions">
+            <button id="publishButton" class="success-button" type="button">Publish Article</button>
+            <button id="saveDraftButton" class="secondary" type="button">Save as Draft</button>
+            <button id="cancelButton" class="secondary" type="button">Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Articles Management Table Panel -->
+      <section class="panel">
+        <h3>Manage Articles</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Article</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Last Updated</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="articlesTable">
+              <tr>
+                <td colspan="5" class="empty">Checking your secure session…</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    
+    <footer>Gedewon Sabafkai · Admin Workspace</footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://zsodixjdlorfdwbfdync.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_vYvWnCLXVWqdP6_Jkit3tQ_Gw9FElRn";
+    const ADMIN_USER_ID = "cc86da0c-0dd3-4bc3-8361-590a23e7b58d";
+    const STORAGE_BUCKET = "article-images";
+    const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5 MB per image
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    const messageBox = document.getElementById("message"), tableBody = document.getElementById("articlesTable"), editorPanel = document.getElementById("editorPanel"), articleForm = document.getElementById("articleForm"), contentEditor = document.getElementById("content");
+    let editingId = null, saving = false, savedRange = null, selectedImage = null, uploading = false;
+
+    function showMessage(text,type="info"){messageBox.textContent=text;messageBox.className="message "+type}
+    function clearMessage(){messageBox.textContent="";messageBox.className="message"}
+    function escapeHTML(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[c])}
+    function formatDate(value){if(!value)return "—";const d=new Date(value);return Number.isNaN(d.getTime())?"—":d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"})}
+    function makeSlug(value){return value.normalize("NFKD").toLowerCase().replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,220)}
+    async function checkAdmin(){const {data,error}=await client.auth.getUser();if(error||!data.user){window.location.replace("login.html");return false}if(data.user.id!==ADMIN_USER_ID){await client.auth.signOut();window.location.replace("login.html");return false}return true}
+    function plainTextToHTML(text){return String(text||"").split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean).map(p=>"<p>"+escapeHTML(p).replace(/\n/g,"<br>")+"</p>").join("")}
+    function contentForEditor(content){if(!content)return "";const value=String(content);return /<\/?[a-z][\s\S]*?>/i.test(value)?value:plainTextToHTML(value)}
+    function rememberSelection(){const s=window.getSelection();if(!s||!s.rangeCount)return;const r=s.getRangeAt(0);if(contentEditor.contains(r.commonAncestorContainer))savedRange=r.cloneRange()}
+    function restoreSelection(){contentEditor.focus();if(!savedRange)return;const s=window.getSelection();s.removeAllRanges();s.addRange(savedRange)}
+    function safeWebURL(value){try{const u=new URL(value,window.location.href);return ["http:","https:"].includes(u.protocol)?u.href:null}catch{return null}}
+    function insertHTMLAtCursor(html){restoreSelection();document.execCommand("insertHTML",false,html);rememberSelection()}
+    function showCoverPreview(url){const img=document.getElementById("coverPreview");const valid=url?safeWebURL(url):null;if(valid){img.src=valid;img.style.display="block"}else{img.removeAttribute("src");img.style.display="none"}}
+    function resetImageSelection(){selectedImage=null;document.getElementById("selectedImageStatus").textContent="No image selected"}
+    function openEditor(article=null){clearMessage();articleForm.reset();contentEditor.innerHTML="";editingId=article?article.id:null;savedRange=null;resetImageSelection();document.getElementById("editorHeading").textContent=article?"Edit article":"Create an article";document.getElementById("coverUploadStatus").textContent="Choose an image, then click Upload cover image.";document.getElementById("coverFile").value="";
+      if(article){document.getElementById("title").value=article.title||"";document.getElementById("slug").value=article.slug||"";document.getElementById("category").value=article.category||"Ideas";document.getElementById("excerpt").value=article.excerpt||"";document.getElementById("coverImage").value=article.cover_image||"";showCoverPreview(article.cover_image||"");contentEditor.innerHTML=contentForEditor(article.content);document.getElementById("slug").dataset.edited="true"}else{document.getElementById("slug").dataset.edited="";showCoverPreview("")}
+      editorPanel.style.display="block";editorPanel.scrollIntoView({behavior:"smooth",block:"start"});document.getElementById("title").focus()}
+    function closeEditor(){editorPanel.style.display="none";articleForm.reset();contentEditor.innerHTML="";editingId=null;savedRange=null;resetImageSelection();showCoverPreview("");clearMessage()}
+
+    async function uploadImage(file,kind){
+      if(!file)throw new Error("Please choose an image first.");
+      if(!file.type||!file.type.startsWith("image/"))throw new Error("Please choose an image file.");
+      if(file.size>MAX_IMAGE_SIZE)throw new Error("This image is larger than 5 MB. Please resize or compress it and try again.");
+      const extension=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
+      const path=kind+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,10)+"."+extension;
+      const {error}=await client.storage.from(STORAGE_BUCKET).upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});
+      if(error)throw error;
+      const {data}=client.storage.from(STORAGE_BUCKET).getPublicUrl(path);
+      if(!data||!data.publicUrl)throw new Error("The image uploaded, but its public URL could not be created.");
+      return data.publicUrl;
+    }
+    async function uploadCover(){if(uploading)return;const file=document.getElementById("coverFile").files[0];const btn=document.getElementById("uploadCoverButton"),status=document.getElementById("coverUploadStatus");if(!file){showMessage("Choose a cover image from your computer first.","error");return}uploading=true;btn.disabled=true;status.textContent="Uploading cover image…";try{const url=await uploadImage(file,"covers");document.getElementById("coverImage").value=url;showCoverPreview(url);status.textContent="Cover image uploaded successfully.";showMessage("Cover image uploaded. Save or publish the article to keep this URL in the article.","success")}catch(e){status.textContent="Upload failed.";showMessage("Could not upload cover image: "+(e.message||"Unknown error"),"error")}finally{uploading=false;btn.disabled=false}}
+    async function uploadInlineImage(){if(uploading)return;const file=document.getElementById("inlineImageFile").files[0];document.getElementById("inlineImageFile").value="";if(!file)return;uploading=true;const btn=document.querySelector('[data-action="image"]');if(btn)btn.disabled=true;showMessage("Uploading image to your blog…","info");try{const url=await uploadImage(file,"inline");const alt=(prompt("Describe the image briefly (optional):")||"").trim();const html='<p><img src="'+escapeHTML(url)+'" alt="'+escapeHTML(alt)+'" loading="lazy" style="width:75%;max-width:100%;height:auto"></p><p><br></p>';insertHTMLAtCursor(html);showMessage("Image uploaded and inserted. Save or publish the article to keep it.","success")}catch(e){showMessage("Could not upload image: "+(e.message||"Unknown error"),"error")}finally{uploading=false;if(btn)btn.disabled=false;rememberSelection()}}
+
+    async function loadArticles(){clearMessage();document.getElementById("refreshButton").disabled=true;tableBody.innerHTML='<tr><td colspan="5" class="empty">Loading articles…</td></tr>';try{const {data,error}=await client.from("articles").select("id,title,slug,excerpt,content,category,cover_image,status,created_at,updated_at,published_at").order("created_at",{ascending:false});if(error)throw error;const articles=data||[];document.getElementById("totalCount").textContent=articles.length;document.getElementById("publishedCount").textContent=articles.filter(a=>a.status==="published").length;document.getElementById("draftCount").textContent=articles.filter(a=>a.status==="draft").length;if(!articles.length){tableBody.innerHTML='<tr><td colspan="5" class="empty">No articles yet. Click New Article to get started.</td></tr>';return}tableBody.innerHTML=articles.map(a=>{const title=escapeHTML(a.title),slug=escapeHTML(a.slug),category=escapeHTML(a.category||"Ideas"),status=a.status==="published"?"published":"draft",date=formatDate(a.updated_at||a.created_at);return `<tr><td><div class="article-title">${title}</div><div class="article-slug">${slug}</div></td><td>${category}</td><td><span class="status ${status}">${status}</span></td><td>${date}</td><td><div class="actions"><button class="secondary" type="button" data-action="view" data-slug="${slug}" ${status!=="published"?"disabled":""}>View</button><button class="primary" type="button" data-action="edit" data-id="${a.id}">Edit</button><button class="danger" type="button" data-action="delete" data-id="${a.id}" data-title="${title}">Delete</button></div></td></tr>`}).join("")}catch(e){tableBody.innerHTML='<tr><td colspan="5" class="empty">Could not load articles.</td></tr>';showMessage("Could not load articles: "+e.message,"error")}finally{document.getElementById("refreshButton").disabled=false}}
+    function getFormData(status){const title=document.getElementById("title").value.trim(),slug=makeSlug(document.getElementById("slug").value.trim()),category=document.getElementById("category").value,excerpt=document.getElementById("excerpt").value.trim(),coverImage=document.getElementById("coverImage").value.trim(),content=contentEditor.innerHTML.trim(),plainContent=contentEditor.innerText.trim();if(!title||!slug||!plainContent)throw new Error("Please enter an article title, URL slug, and article content.");if(coverImage&&!safeWebURL(coverImage))throw new Error("Please enter a valid http or https cover image URL, or upload a cover image.");const payload={title,slug,category,excerpt:excerpt||null,cover_image:coverImage||null,content,status,updated_at:new Date().toISOString()};if(status==="published")payload.published_at=new Date().toISOString();else if(!editingId)payload.published_at=null;return payload}
+    async function saveArticle(status){if(saving)return;clearMessage();let payload;try{payload=getFormData(status)}catch(e){showMessage(e.message,"error");return}saving=true;const draftBtn=document.getElementById("saveDraftButton"),publishBtn=document.getElementById("publishButton");draftBtn.disabled=publishBtn.disabled=true;try{let result;if(editingId)result=await client.from("articles").update(payload).eq("id",editingId).select("id").single();else result=await client.from("articles").insert(payload).select("id").single();if(result.error)throw result.error;const successText=status==="published"?"Article published successfully.":"Draft saved successfully.";closeEditor();await loadArticles();showMessage(successText,"success")}catch(e){showMessage("Could not save article: "+(e.message||"Unknown error")+". Check that the URL slug is unique.","error")}finally{saving=false;draftBtn.disabled=publishBtn.disabled=false}}
+
+    contentEditor.addEventListener("keyup",rememberSelection);contentEditor.addEventListener("mouseup",rememberSelection);contentEditor.addEventListener("input",rememberSelection);
+    contentEditor.addEventListener("click",event=>{const img=event.target.closest("img");if(img&&contentEditor.contains(img)){selectedImage=img;const width=img.style.width||"75%";const options=["25%","50%","75%","100%"];document.getElementById("imageWidth").value=options.includes(width)?width:"100%";document.getElementById("selectedImageStatus").textContent="Image selected"}else if(!event.target.closest("img"))resetImageSelection()});
+    document.querySelectorAll(".toolbar button").forEach(button=>{button.addEventListener("mousedown",event=>{event.preventDefault();rememberSelection()});button.addEventListener("click",()=>{const command=button.dataset.command,action=button.dataset.action;if(command){restoreSelection();document.execCommand(command,false,null);rememberSelection();return}if(action==="link"){restoreSelection();const input=prompt("Enter the link URL (https://...):");if(!input)return;const url=safeWebURL(input.trim());if(!url){showMessage("Please enter a valid http or https link.","error");return}document.execCommand("createLink",false,url);rememberSelection()}if(action==="image"){restoreSelection();document.getElementById("inlineImageFile").click()}if(action==="image-url"){restoreSelection();const input=prompt("Paste the direct image URL (https://...):");if(!input)return;const url=safeWebURL(input.trim());if(!url){showMessage("Please enter a valid http or https image URL.","error");return}const alt=prompt("Describe the image briefly (optional):")||"";insertHTMLAtCursor('<p><img src="'+escapeHTML(url)+'" alt="'+escapeHTML(alt)+'" loading="lazy" style="width:75%;max-width:100%;height:auto"></p><p><br></p>')}if(action==="clear"){restoreSelection();document.execCommand("removeFormat",false,null);document.execCommand("formatBlock",false,"P");rememberSelection()}})});
+    document.getElementById("inlineImageFile").addEventListener("change",uploadInlineImage);
+    document.getElementById("blockFormat").addEventListener("change",e=>{restoreSelection();document.execCommand("formatBlock",false,e.target.value);rememberSelection()});
+    document.getElementById("imageWidth").addEventListener("change",()=>{});
+    document.getElementById("applyImageWidth").addEventListener("click",()=>{if(!selectedImage||!contentEditor.contains(selectedImage)){showMessage("Click an image inside your article first.","info");return}selectedImage.style.width=document.getElementById("imageWidth").value;selectedImage.style.maxWidth="100%";selectedImage.style.height="auto";showMessage("Image width updated. Save the article to keep the change.","success")});
+    document.getElementById("coverImage").addEventListener("input",e=>showCoverPreview(e.target.value.trim()));document.getElementById("coverFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;if(f.size>MAX_IMAGE_SIZE){showMessage("This image is larger than 5 MB. Please resize or compress it.","error");e.target.value="";return}document.getElementById("coverUploadStatus").textContent="Selected: "+f.name+". Click Upload cover image to upload it."});document.getElementById("uploadCoverButton").addEventListener("click",uploadCover);
+    document.getElementById("title").addEventListener("input",e=>{const slug=document.getElementById("slug");if(!slug.dataset.edited)slug.value=makeSlug(e.target.value)});document.getElementById("slug").addEventListener("input",e=>e.target.dataset.edited="true");
+    document.getElementById("newArticleButton").addEventListener("click",()=>openEditor());document.getElementById("cancelButton").addEventListener("click",closeEditor);document.getElementById("saveDraftButton").addEventListener("click",()=>saveArticle("draft"));document.getElementById("publishButton").addEventListener("click",()=>saveArticle("published"));document.getElementById("refreshButton").addEventListener("click",loadArticles);
+    
+    // Mobile sidebar toggle
+    document.getElementById("sidebarToggle").addEventListener("click", () => {
+      document.getElementById("sidebar").classList.toggle("open");
+    });
+
+    tableBody.addEventListener("click",async event=>{const button=event.target.closest("button[data-action]");if(!button||button.disabled)return;const action=button.dataset.action;if(action==="view"){window.open("article.html?slug="+encodeURIComponent(button.dataset.slug),"_blank");return}if(action==="edit"){clearMessage();button.disabled=true;try{const {data,error}=await client.from("articles").select("*").eq("id",button.dataset.id).single();if(error)throw error;openEditor(data)}catch(e){showMessage("Could not open article: "+e.message,"error")}finally{button.disabled=false}return}if(action==="delete"){const id=button.dataset.id,title=button.dataset.title||"this article";if(!confirm('Delete "'+title+'" permanently? This cannot be undone.'))return;button.disabled=true;const {error}=await client.from("articles").delete().eq("id",id);if(error){showMessage("Could not delete article: "+error.message,"error");button.disabled=false;return}await loadArticles();showMessage("Article deleted.","success")}});
+    document.getElementById("logoutButton").addEventListener("click",async()=>{const b=document.getElementById("logoutButton");b.disabled=true;const {error}=await client.auth.signOut();if(error){showMessage("Could not log out: "+error.message,"error");b.disabled=false;return}window.location.replace("login.html")});
+    async function startDashboard(){try{if(!window.supabase){showMessage("Supabase did not load. Check your internet connection and refresh.","error");return}if(!await checkAdmin())return;await loadArticles()}catch(e){showMessage("Dashboard error: "+e.message,"error")}}
+    startDashboard();
+  </script>
+</body>
+</html>

@@ -1,0 +1,575 @@
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Articles — Gedewon Sabafka'i</title>
+    <meta name="description" content="Explore the complete archive of thoughtful essays, personal reflections, stories, and ideas by Gedewon Sabafka'i.">
+
+    <meta property="og:title" content="All Articles — Gedewon Sabafka'i">
+    <meta property="og:description" content="Browse the complete archive of essays, stories, and reflections.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="articles.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        warmbg: '#F8F6F1',
+                        maintext: '#20231F',
+                        earthaccent: '#8B6A45',
+                        softbeige: '#DCD4C8',
+                        cardbg: '#FFFFFF',
+                        bordercol: '#E5E1D8'
+                    },
+                    fontFamily: {
+                        serif: ['Lora', 'Georgia', 'serif'],
+                        sans: ['Arial', 'Helvetica', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        body {
+            background-color: #F8F6F1;
+            color: #20231F;
+            font-family: Arial, Helvetica, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4, h5, h6, .font-editorial {
+            font-family: 'Lora', Georgia, serif;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible {
+            outline: 2px solid #8B6A45;
+            outline-offset: 3px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-warmbg text-maintext min-h-screen flex flex-col selection:bg-earthaccent selection:text-white">
+
+<header class="border-b border-bordercol bg-warmbg/90 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+        <a href="index.html" class="font-editorial text-2xl font-bold tracking-tight text-maintext hover:text-earthaccent transition-colors">
+            Gedewon Sabafka'i
+        </a>
+
+        <nav class="hidden md:flex items-center space-x-8 text-sm font-sans tracking-wide">
+            <a href="index.html" class="text-maintext hover:text-earthaccent transition-colors">Home</a>
+            <a href="articles.html" class="text-earthaccent font-semibold transition-colors">All Articles</a>
+            <a href="index.html#about" class="text-maintext hover:text-earthaccent transition-colors">About</a>
+        </nav>
+
+        <div class="flex items-center space-x-4">
+            <form id="desktop-search-form" action="articles.html" method="GET" class="hidden sm:flex items-center bg-white border border-bordercol rounded-full px-3 py-1.5 focus-within:border-earthaccent transition-colors">
+                <svg class="w-4 h-4 text-earthaccent mr-2 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input type="search" name="q" id="desktop-q-input" placeholder="Search articles..." aria-label="Search articles" class="bg-transparent text-xs sm:text-sm text-maintext focus:outline-none w-32 lg:w-48 placeholder:text-zinc-400">
+            </form>
+
+            <button id="mobile-menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle navigation menu" class="md:hidden p-2 text-maintext hover:text-earthaccent rounded-lg transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden border-b border-bordercol bg-warmbg px-6 py-4 space-y-4 shadow-sm">
+        <form id="mobile-search-form" action="articles.html" method="GET" class="flex items-center bg-white border border-bordercol rounded-full px-3 py-2">
+            <svg class="w-4 h-4 text-earthaccent mr-2 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="search" name="q" id="mobile-q-input" placeholder="Search articles..." aria-label="Search articles" class="bg-transparent text-sm text-maintext focus:outline-none w-full placeholder:text-zinc-400">
+        </form>
+
+        <nav class="flex flex-col space-y-3 pt-2 font-sans text-base">
+            <a href="index.html" class="text-maintext hover:text-earthaccent py-1 transition-colors">Home</a>
+            <a href="articles.html" class="text-earthaccent font-semibold py-1">All Articles</a>
+            <a href="index.html#about" class="text-maintext hover:text-earthaccent py-1 transition-colors">About</a>
+        </nav>
+    </div>
+</header>
+
+<main class="flex-grow">
+    <section class="max-w-4xl mx-auto px-6 pt-16 pb-10 text-center">
+        <div class="text-xs font-sans uppercase tracking-widest text-earthaccent font-semibold mb-3">
+            THE ARCHIVE
+        </div>
+
+        <h1 class="font-editorial text-4xl sm:text-5xl font-normal tracking-tight text-maintext mb-4">
+            All Articles
+        </h1>
+
+        <p class="font-sans text-base sm:text-lg text-zinc-700 max-w-2xl mx-auto leading-relaxed mb-8">
+            Browse through all essays, stories, reflections, and ideas published by Gedewon Sabafka'i. Use the search or categories below to find specific topics.
+        </p>
+
+        <form id="archive-search-form" class="max-w-xl mx-auto flex items-center bg-white border border-bordercol rounded-full px-4 py-2.5 shadow-sm focus-within:border-earthaccent transition-colors mb-6">
+            <svg class="w-5 h-5 text-earthaccent mr-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+
+            <input type="search" id="archive-search-input" name="q" placeholder="Search by title, topic, or keyword..." aria-label="Search published articles" class="bg-transparent text-sm sm:text-base text-maintext focus:outline-none w-full placeholder:text-zinc-400">
+
+            <button type="submit" class="ml-2 px-5 py-2 bg-earthaccent text-white font-sans text-xs sm:text-sm font-medium rounded-full hover:bg-[#735738] transition-colors shrink-0">
+                Search
+            </button>
+        </form>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-bordercol">
+            <div id="article-count-display" class="font-sans text-sm text-zinc-600 text-left" aria-live="polite">
+                Showing <span id="count-num" class="font-semibold text-maintext">0</span> articles
+            </div>
+
+            <div id="category-filters" class="flex flex-wrap items-center justify-start sm:justify-end gap-2 font-sans text-xs">
+                <button type="button" data-category="All" aria-pressed="true" class="filter-btn px-3.5 py-1.5 rounded-full bg-earthaccent text-white font-medium transition-colors">All</button>
+                <button type="button" data-category="Reflections" aria-pressed="false" class="filter-btn px-3.5 py-1.5 rounded-full bg-white border border-bordercol text-maintext hover:border-earthaccent transition-colors">Reflections</button>
+                <button type="button" data-category="Stories" aria-pressed="false" class="filter-btn px-3.5 py-1.5 rounded-full bg-white border border-bordercol text-maintext hover:border-earthaccent transition-colors">Stories</button>
+                <button type="button" data-category="Ideas" aria-pressed="false" class="filter-btn px-3.5 py-1.5 rounded-full bg-white border border-bordercol text-maintext hover:border-earthaccent transition-colors">Ideas</button>
+                <button type="button" data-category="Personal Growth" aria-pressed="false" class="filter-btn px-3.5 py-1.5 rounded-full bg-white border border-bordercol text-maintext hover:border-earthaccent transition-colors">Personal Growth</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-5xl mx-auto px-6 pb-20">
+        <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" aria-live="polite">
+            <p class="col-span-full text-center text-sm text-zinc-500 py-16">Loading published articles...</p>
+        </div>
+
+        <div id="no-results-state" class="hidden text-center py-16 bg-white border border-bordercol rounded-xl px-6 max-w-xl mx-auto shadow-sm my-8">
+            <div class="w-12 h-12 rounded-full bg-softbeige flex items-center justify-center mx-auto mb-4 text-earthaccent">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </div>
+
+            <h3 id="no-results-title" class="font-editorial text-2xl font-normal text-maintext mb-2">No articles found</h3>
+            <p id="no-results-description" class="font-sans text-sm text-zinc-600 mb-6 leading-relaxed">
+                We couldn't find articles matching your search or selected category. Try changing your search term or category.
+            </p>
+
+            <button id="clear-filters-btn" type="button" class="px-6 py-2.5 bg-earthaccent text-white font-sans text-sm font-medium rounded-md hover:bg-[#735738] transition-colors shadow-sm">
+                Clear Search &amp; Show All Articles
+            </button>
+        </div>
+    </section>
+</main>
+
+<footer class="border-t border-bordercol bg-warmbg py-12 mt-auto">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="text-center md:text-left">
+            <a href="index.html" class="font-editorial text-xl font-bold tracking-tight text-maintext block mb-1">
+                Gedewon Sabafka'i
+            </a>
+            <p class="font-sans text-xs text-zinc-500">Thoughts, Stories &amp; Ideas.</p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-6 font-sans text-xs sm:text-sm text-zinc-700">
+            <a href="index.html" class="hover:text-earthaccent transition-colors">Home</a>
+            <a href="articles.html" class="text-earthaccent font-semibold transition-colors">All Articles</a>
+            <a href="index.html#about" class="hover:text-earthaccent transition-colors">About</a>
+            <a href="login.html" class="hover:text-earthaccent transition-colors">Admin Login</a>
+        </div>
+
+        <div class="text-xs font-sans text-zinc-500 text-center md:text-right">
+            &copy; <span id="current-year">2026</span> Gedewon Sabafka'i. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+(() => {
+    'use strict';
+
+    const SUPABASE_URL = 'https://zsodixjdlorfdwbfdync.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_vYvWnCLXVWqdP6_Jkit3tQ_Gw9FElRn';
+
+    const articlesGrid = document.getElementById('articles-grid');
+    const noResultsState = document.getElementById('no-results-state');
+    const noResultsTitle = document.getElementById('no-results-title');
+    const noResultsDescription = document.getElementById('no-results-description');
+    const countNum = document.getElementById('count-num');
+
+    const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
+    const archiveSearchForm = document.getElementById('archive-search-form');
+    const archiveSearchInput = document.getElementById('archive-search-input');
+    const desktopSearchForm = document.getElementById('desktop-search-form');
+    const desktopQInput = document.getElementById('desktop-q-input');
+    const mobileSearchForm = document.getElementById('mobile-search-form');
+    const mobileQInput = document.getElementById('mobile-q-input');
+    const clearFiltersBtn = document.getElementById('clear-filters-btn');
+
+    let allArticles = [];
+    let currentCategory = 'All';
+    let currentQuery = '';
+    let loadingError = false;
+
+    function formatDate(value) {
+        if (!value) return 'Date unavailable';
+
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return 'Date unavailable';
+
+        return new Intl.DateTimeFormat('en', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        }).format(date);
+    }
+
+    function articleDate(article) {
+        return article.published_at || article.created_at || null;
+    }
+
+    function makeLink(article, text, className) {
+        const link = document.createElement('a');
+        link.href = `article.html?slug=${encodeURIComponent(article.slug)}`;
+        link.textContent = text;
+        link.className = className;
+        return link;
+    }
+
+    function makeImage(article) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'aspect-[16/10] overflow-hidden bg-softbeige';
+
+        if (article.cover_image) {
+            const image = document.createElement('img');
+            image.src = article.cover_image;
+            image.alt = article.title
+                ? `Cover image for ${article.title}`
+                : 'Article cover';
+            image.loading = 'lazy';
+            image.className = 'w-full h-full object-cover hover:scale-105 transition-transform duration-500';
+
+            image.addEventListener('error', () => {
+                wrapper.replaceChildren();
+                wrapper.classList.add('flex', 'items-center', 'justify-center', 'p-6');
+
+                const fallback = document.createElement('span');
+                fallback.className = 'font-editorial text-lg text-maintext/70 text-center';
+                fallback.textContent = article.title || "Gedewon Sabafka'i";
+                wrapper.appendChild(fallback);
+            }, { once: true });
+
+            wrapper.appendChild(image);
+        } else {
+            wrapper.classList.add('flex', 'items-center', 'justify-center', 'p-6');
+
+            const placeholder = document.createElement('span');
+            placeholder.className = 'font-editorial text-lg text-maintext/70 text-center';
+            placeholder.textContent = article.title || "Gedewon Sabafka'i";
+            wrapper.appendChild(placeholder);
+        }
+
+        return wrapper;
+    }
+
+    function createArticleCard(article) {
+        const card = document.createElement('article');
+        card.className = 'article-card flex flex-col bg-white border border-bordercol rounded-lg overflow-hidden hover:shadow-md transition-shadow';
+
+        card.appendChild(makeImage(article));
+
+        const body = document.createElement('div');
+        body.className = 'p-6 flex flex-col flex-grow';
+
+        const metadata = document.createElement('div');
+        metadata.className = 'flex flex-wrap items-center gap-2 text-xs text-zinc-500 mb-2 font-sans';
+
+        const category = document.createElement('span');
+        category.className = 'text-earthaccent font-semibold';
+        category.textContent = article.category || 'Ideas';
+
+        const separator = document.createElement('span');
+        separator.textContent = '•';
+
+        const date = document.createElement('time');
+        const dateValue = articleDate(article);
+        if (dateValue) date.dateTime = dateValue;
+        date.textContent = formatDate(dateValue);
+
+        metadata.append(category, separator, date);
+
+        const heading = document.createElement('h2');
+        heading.className = 'font-editorial text-xl font-normal leading-snug mb-3';
+        heading.appendChild(makeLink(
+            article,
+            article.title || 'Untitled article',
+            'hover:text-earthaccent transition-colors'
+        ));
+
+        const excerpt = document.createElement('p');
+        excerpt.className = 'font-sans text-sm text-zinc-600 mb-6 flex-grow leading-relaxed';
+        excerpt.textContent = article.excerpt || 'Read the full article to discover more.';
+
+        const footer = document.createElement('div');
+        footer.appendChild(makeLink(
+            article,
+            'Read Article →',
+            'font-sans text-xs font-semibold text-earthaccent hover:text-maintext transition-colors inline-flex items-center'
+        ));
+
+        body.append(metadata, heading, excerpt, footer);
+        card.appendChild(body);
+
+        return card;
+    }
+
+    function updateFilterButtons() {
+        filterButtons.forEach(button => {
+            const active = button.dataset.category === currentCategory;
+            button.setAttribute('aria-pressed', String(active));
+
+            if (active) {
+                button.classList.add('bg-earthaccent', 'text-white', 'font-medium');
+                button.classList.remove('bg-white', 'border', 'border-bordercol', 'text-maintext');
+            } else {
+                button.classList.remove('bg-earthaccent', 'text-white', 'font-medium');
+                button.classList.add('bg-white', 'border', 'border-bordercol', 'text-maintext');
+            }
+        });
+    }
+
+    function updateCount(count) {
+        if (countNum) countNum.textContent = String(count);
+    }
+
+    function updateURLParams() {
+        const params = new URLSearchParams(window.location.search);
+
+        if (currentQuery) {
+            params.set('q', currentQuery);
+        } else {
+            params.delete('q');
+        }
+
+        const queryString = params.toString();
+        const newURL = window.location.pathname + (queryString ? `?${queryString}` : '');
+        window.history.replaceState(null, '', newURL);
+    }
+
+    function syncSearchInputs() {
+        if (archiveSearchInput) archiveSearchInput.value = currentQuery;
+        if (desktopQInput) desktopQInput.value = currentQuery;
+        if (mobileQInput) mobileQInput.value = currentQuery;
+    }
+
+    function showNoResults(title, description) {
+        articlesGrid.classList.add('hidden');
+        noResultsState.classList.remove('hidden');
+        noResultsTitle.textContent = title;
+        noResultsDescription.textContent = description;
+    }
+
+    function renderArticles() {
+        updateFilterButtons();
+
+        if (loadingError) {
+            updateCount(0);
+            showNoResults(
+                'Articles could not be loaded',
+                'Please refresh the page. If the problem continues, check the Supabase connection and database permissions.'
+            );
+            return;
+        }
+
+        const query = currentQuery.toLocaleLowerCase();
+
+        const filteredArticles = allArticles.filter(article => {
+            const category = article.category || 'Ideas';
+
+            const matchesCategory =
+                currentCategory === 'All' ||
+                category.toLocaleLowerCase() === currentCategory.toLocaleLowerCase();
+
+            const searchableText = [
+                article.title,
+                article.excerpt,
+                article.content,
+                article.category,
+                article.slug
+            ].filter(Boolean).join(' ').toLocaleLowerCase();
+
+            const matchesQuery = !query || searchableText.includes(query);
+
+            return matchesCategory && matchesQuery;
+        });
+
+        updateCount(filteredArticles.length);
+        articlesGrid.replaceChildren();
+
+        if (filteredArticles.length === 0) {
+            if (allArticles.length === 0) {
+                showNoResults(
+                    'No published articles yet',
+                    'There are no published articles to display. Publish an article from your admin portal and it will appear here.'
+                );
+            } else {
+                showNoResults(
+                    'No articles found',
+                    'We could not find any articles matching your search or selected category. Try adjusting your search term or category.'
+                );
+            }
+            return;
+        }
+
+        noResultsState.classList.add('hidden');
+        articlesGrid.classList.remove('hidden');
+
+        filteredArticles.forEach(article => {
+            articlesGrid.appendChild(createArticleCard(article));
+        });
+    }
+
+    async function loadPublishedArticles() {
+        if (!window.supabase) {
+            loadingError = true;
+            console.error('Supabase JavaScript library did not load.');
+            renderArticles();
+            return;
+        }
+
+        const supabaseClient = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY
+        );
+
+        const { data, error } = await supabaseClient
+            .from('articles')
+            .select('id, title, slug, excerpt, content, category, cover_image, published_at, created_at')
+            .eq('status', 'published')
+            .order('published_at', { ascending: false, nullsFirst: false })
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            loadingError = true;
+            console.error('Could not load published articles:', error.message);
+            renderArticles();
+            return;
+        }
+
+        allArticles = Array.isArray(data) ? data : [];
+        console.log(`Loaded ${allArticles.length} published article(s) from Supabase.`);
+
+        renderArticles();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const yearSpan = document.getElementById('current-year');
+        if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                const expanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+                mobileMenuBtn.setAttribute('aria-expanded', String(!expanded));
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                });
+            });
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        currentQuery = (urlParams.get('q') || '').trim();
+        syncSearchInputs();
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                currentCategory = button.dataset.category || 'All';
+                renderArticles();
+            });
+        });
+
+        if (archiveSearchForm) {
+            archiveSearchForm.addEventListener('submit', event => {
+                event.preventDefault();
+                currentQuery = archiveSearchInput.value.trim();
+                syncSearchInputs();
+                updateURLParams();
+                renderArticles();
+            });
+        }
+
+        if (desktopSearchForm) {
+            desktopSearchForm.addEventListener('submit', event => {
+                event.preventDefault();
+                currentQuery = desktopQInput.value.trim();
+                syncSearchInputs();
+                updateURLParams();
+                renderArticles();
+
+                if (mobileMenu) mobileMenu.classList.add('hidden');
+                if (mobileMenuBtn) mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            });
+        }
+
+        if (mobileSearchForm) {
+            mobileSearchForm.addEventListener('submit', event => {
+                event.preventDefault();
+                currentQuery = mobileQInput.value.trim();
+                syncSearchInputs();
+                updateURLParams();
+                renderArticles();
+
+                if (mobileMenu) mobileMenu.classList.add('hidden');
+                if (mobileMenuBtn) mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            });
+        }
+
+        if (clearFiltersBtn) {
+            clearFiltersBtn.addEventListener('click', () => {
+                currentQuery = '';
+                currentCategory = 'All';
+                syncSearchInputs();
+                updateURLParams();
+                renderArticles();
+            });
+        }
+
+        window.addEventListener('popstate', () => {
+            const params = new URLSearchParams(window.location.search);
+            currentQuery = (params.get('q') || '').trim();
+            syncSearchInputs();
+            renderArticles();
+        });
+
+        loadPublishedArticles();
+    });
+})();
+</script>
+
+</body>
+</html>
